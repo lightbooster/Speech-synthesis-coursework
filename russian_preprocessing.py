@@ -1,4 +1,5 @@
 import inflect
+from num_to_text import num2text
 from googletrans import Translator
 
 
@@ -28,7 +29,7 @@ class RussianPreprocessor:
     def __init__(self):
         self._symbols_dict = {self.__SYMBOLS[i]: i for i in range(len(self.__SYMBOLS))}
         self._my_translator = MyTranslator()
-        self._inflect_engine = inflect.engine()
+        # self._inflect_engine = inflect.engine()
 
     def _preprocess_text(self, data: str):
         """
@@ -39,7 +40,22 @@ class RussianPreprocessor:
         preprocessed_data = ""
         data = data.strip().lower()
         is_prev_space = False
+
+        num_str = ""
+        is_num = False
+
         for char in data:
+            if char.isdecimal():
+                if not is_num and preprocessed_data[-1] != " ":
+                    preprocessed_data += " "
+                is_num = True
+                num_str += char
+                continue
+            elif is_num:
+                is_num = False
+                preprocessed_data += num2text(int(num_str))
+                num_str = ""
+
             if char not in self.__SYMBOLS:
                 continue
 
@@ -53,6 +69,9 @@ class RussianPreprocessor:
 
             preprocessed_data += char
 
+        if is_num:
+            preprocessed_data += num2text(int(num_str))
+
         return preprocessed_data
 
     def text_to_sequence(self, data: str):
@@ -65,15 +84,21 @@ class RussianPreprocessor:
         encoded_chars = [self._symbols_dict[char] for char in preprocessed_data]
         return encoded_chars
 
-    def number_to_text(self, number: int, in_lang_="en", out_lang_="ru") -> str:
-        string_num = self._inflect_engine.number_to_words(number)
+    def number_preprocessor(self, number: int, in_lang_="en", out_lang_="ru") -> str:
+        inflect.engine()
+        string_num = inflect.engine().number_to_words(number)
+        # print(string_num)
         result = self._my_translator.translate(in_text=string_num, in_lang=in_lang_, out_lang=out_lang_)
         return result.text
 
 
 def main() -> None:
     my_rp = RussianPreprocessor()
-    # print(my_rp.number_to_text(151))
+    # print(my_rp.number_to_text(10))
+    # print(num2text(50))
+    # print(my_rp.number_preprocessor(50))
+    print(my_rp._preprocess_text("с 10*50"))
+    print(my_rp.text_to_sequence("с 10*50"))
 
 
 if __name__ == '__main__':
