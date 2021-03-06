@@ -12,7 +12,9 @@ class MyTranslator:
     def translate(self, in_text, in_lang="en", out_lang="ru"):
         while True:
             try:
-                result_ = self.translator.translate(in_text, src=in_lang, dest=out_lang)
+                result_ = self.translator.translate(in_text,
+                                                    src=in_lang,
+                                                    dest=out_lang)
                 return result_
             except Exception as e:
                 self.translator = Translator()
@@ -27,7 +29,8 @@ class RussianPreprocessor:
     __SYMBOLS = "-!'(),.:;? абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
     def __init__(self):
-        self._symbols_dict = {self.__SYMBOLS[i]: i for i in range(len(self.__SYMBOLS))}
+        self._symbols_dict = {self.__SYMBOLS[i]: i for i in
+                              range(len(self.__SYMBOLS))}
         self._my_translator = MyTranslator()
         # self._inflect_engine = inflect.engine()
 
@@ -35,7 +38,8 @@ class RussianPreprocessor:
         """
         Cleans Cyrillic
         :param data (str): source string
-        :return (str): lowercased string, deleted repeated spaces, only Cyrillic alphabet and permitted symbols
+        :return (str): lowercased string, deleted repeated spaces,
+                       only Cyrillic alphabet and permitted symbols
         """
         preprocessed_data = ""
         data = data.strip().lower()
@@ -81,14 +85,18 @@ class RussianPreprocessor:
         :return: (list) of ints
         """
         preprocessed_data = self._preprocess_text(data)
-        encoded_chars = [self._symbols_dict[char] for char in preprocessed_data]
+        encoded_chars = [self._symbols_dict[char] for char in
+                         preprocessed_data]
         return encoded_chars
 
-    def number_preprocessor(self, number: int, in_lang_="en", out_lang_="ru") -> str:
+    def number_preprocessor(self, number: int, in_lang_="en",
+                            out_lang_="ru") -> str:
         inflect.engine()
         string_num = inflect.engine().number_to_words(number)
         # print(string_num)
-        result = self._my_translator.translate(in_text=string_num, in_lang=in_lang_, out_lang=out_lang_)
+        result = self._my_translator.translate(in_text=string_num,
+                                               in_lang=in_lang_,
+                                               out_lang=out_lang_)
         return result.text
 
 
