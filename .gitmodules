@@ -1,3 +1,6 @@
 [submodule "tacotron2"]
 	path = tacotron2
 	url = https://github.com/lightbooster/tacotron2.git
+[submodule "Real-Time-Voice-Cloning/Real-Time-Voice-Cloning"]
+	path = Real-Time-Voice-Cloning/Real-Time-Voice-Cloning
+	url = https://github.com/CorentinJ/Real-Time-Voice-Cloning.git
