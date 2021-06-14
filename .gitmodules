@@ -4,3 +4,6 @@
 [submodule "mellotron"]
 	path = mellotron
 	url = https://github.com/lightbooster/mellotron.git
+[submodule "TP-GST-BERT-Tacotron2"]
+	path = TP-GST-BERT-Tacotron2
+	url = https://github.com/lightbooster/TP-GST-BERT-Tacotron2.git
